@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="static/style2.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Spot</title>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <img src="static/pics/logo.png" alt="Spot Logo" class="logo">
+            <input type="search" placeholder="Search hubs" class="search-bar">
+            <img src="static/pics/user.png" width="30" height="30" alt="Profile Logo" class="profile-logo"><a href="profile.html">Profile</a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-links">
+                <li><a href="create_post.html" style="font-weight: bold; font-size:larger;">Create post</a></li>
+                <br>
+                <li><img src="static/pics/423483-200.png"><a href="main.html">Home</a></li>
+                <li><img src="static/pics/fire-2.png"><a href="hub2.html">Lit</a></li>
+                <br>
+                <p1>HUBS</p1>
+                <br>
+                <br>
+                <li><img src="static/pics/game.png"><a href="games.html">Games</a></li>
+                <li><img src="static/pics/ball.png"><a href="sports.html">Sports</a></li>
+                <li><img src="static/pics/bit.png"><a href="crypto.html">Crypto</a></li>
+                <li><img src="static/pics/car.png"><a href="cars.html">Cars</a></li>
+                <li><img src="static/pics/health.png"><a href="health.html">Health</a></li>
+                <li><img src="static/pics/meental.png"><a href="mental.html">Mental</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <div class="content">
+                <div class="hub-name">
+                    <span class="f-letter">F</span>hub/forzahorizon4
+                </div>
+                <h1>Drift Series best set</h1>
+                <div class="forza">
+                    <img src="static/pics/forza.jpg">
+                </div>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text <br>ever since the 1500s,
+                     when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries,<br>  but also the
+                     leap into electronic typesetting, remaining essentially unchanged. It was popularised in the
+                     1960s with the release of Letraset<br>  sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
+                     including versions of Lorem Ipsum</p>
+                     <button class="heart-button" onclick="this.classList.toggle('clicked')">Like</button>
+                     <span class="comment-icon" onclick="toggleCommentSection('commentSection1')">&#128172;</span>
+                     <!-- Comment Section -->
+                     <div id="commentSection1" class="comment-section">
+                         <textarea id="commentInput1" placeholder="Leave a comment"></textarea>
+                         <button onclick="postComment('comments1')">Post Comment</button>
+                     </div>
+                     <!-- Display Comments -->
+                     <div id="comments1" class="comments">
+                     </div>
+                </div>
+<!--comment scriprt-->
+<script>
+function toggleCommentSection(commentSectionId) {
+    var commentSection = document.getElementById(commentSectionId);
+    commentSection.classList.toggle('active');
+}
+
+function postComment(commentsId) {
+    var commentInput = document.getElementById(commentsId).querySelector('textarea');
+    var commentText = commentInput.value;
+    if (commentText.trim() !== '') {
+        var commentDiv = document.createElement('div');
+        commentDiv.textContent = commentText;
+        document.getElementById(commentsId).appendChild(commentDiv);
+        commentInput.value = '';
+    }
+}</script>
+            <div class="sidebar">
+                <p1 style="padding-left: 120px;">EVENTS</p1>
+                <div class="post">
+                    <span class="f-letter">e</span>event/Goliath
+                    <br><br>
+                    <h3>Goliath Race</h3>
+                    <div class="forza2">
+                    <img src="static/pics/forza2.jpg">
+                </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div class="post">
+                    <span class="f-letter">e</span>event/games
+                    <br><br>
+                    <h3>SF battle</h3>
+                    <div class="forza2">
+                        <img src="static/pics/sf.jpg">
+                    </div>
+                    <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+                <div class="post">
+                    <span class="f-letter">e</span>event/mental
+                    <br><br>
+                    <h3>Peep Talk</h3>
+                    <div class="forza2">
+                    <img src="static/pics/talk.jpg">
+                </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div class="post">
+                    <span class="f-letter">e</span>event/health
+                    <br><br>
+                    <h3>Talk to professor</h3>
+                    <div class="forza2">
+                    <img src="static/pics/meental.png">
+                </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+            </div>
+        </div>
+        <div class="container3">
+            <div class="content">
+                <div class="hub-name">
+                    <span class="f-letter">S</span>hub/Sports
+                </div>
+                <h1>Lewis Hammilton in Ferrari!</h1>
+                <div class="forza">
+                    <img src="static/pics/lh.jpg">
+                </div>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text <br>ever since the 1500s,
+                     when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries,<br>  but also the
+                     leap into electronic typesetting, remaining essentially unchanged. It was popularised in the
+                     1960s with the release of Letraset<br>  sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
+                     including versions of Lorem Ipsum</p>
+                     <button class="heart-button" onclick="this.classList.toggle('clicked')">Like</button>
+                     <span class="comment-icon" onclick="toggleCommentSection('commentSection1')">&#128172;</span>
+                     <!-- Comment Section -->
+                     <div id="commentSection2" class="comment-section">
+                         <textarea id="commentInput2" placeholder="Leave a comment"></textarea>
+                         <button onclick="postComment('comments2')">Post Comment</button>
+                     </div>
+                     <!-- Display Comments -->
+                     <div id="comments2" class="comments">
+                         <!-- Comments will be displayed here -->
+                     </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="content">
+                <div class="hub-name">
+                    <span class="f-letter">G</span>hub/games
+                </div>
+                <h1>Betboom Dacha 2024: 1x1 tournament</h1>
+                <div class="forza">
+                    <img src="static/pics/ds.jpg">
+                </div>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text <br>ever since the 1500s,
+                     when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries,<br>  but also the
+                     leap into electronic typesetting, remaining essentially unchanged. It was popularised in the
+                     1960s with the release of Letraset<br>  sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
+                     including versions of Lorem Ipsum</p>
+                     <button class="heart-button" onclick="this.classList.toggle('clicked')">Like</button>
+                     <span class="comment-icon" onclick="toggleCommentSection('commentSection1')">&#128172;</span>
+                     <!-- Comment Section -->
+                     <div id="commentSection1" class="comment-section">
+                         <textarea id="commentInput1" placeholder="Leave a comment"></textarea>
+                         <button onclick="postComment('comments1')">Post Comment</button>
+                     </div>
+                     <!-- Display Comments -->
+                     <div id="comments1" class="comments">
+                     </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="content">
+                <div class="hub-name">
+                    <span class="f-letter">G</span>hub/games
+                </div>
+                <h1>IEM Katowice 2024 champions: Team Spirit!</h1>
+                <div class="forza">
+                    <img src="static/pics/iem.jpg">
+                </div>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text <br>ever since the 1500s,
+                     when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries,<br>  but also the
+                     leap into electronic typesetting, remaining essentially unchanged. It was popularised in the
+                     1960s with the release of Letraset<br>  sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
+                     including versions of Lorem Ipsum</p>
+                     <button class="heart-button" onclick="this.classList.toggle('clicked')">Like</button>
+                     <span class="comment-icon" onclick="toggleCommentSection('commentSection1')">&#128172;</span>
+                     <!-- Comment Section -->
+                     <div id="commentSection1" class="comment-section">
+                         <textarea id="commentInput1" placeholder="Leave a comment"></textarea>
+                         <button onclick="postComment('comments1')">Post Comment</button>
+                     </div>
+                     <!-- Display Comments -->
+                     <div id="comments1" class="comments">
+                     </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="content">
+                <div class="hub-name">
+                    <span class="f-letter">G</span>hub/cars
+                </div>
+                <h1>Posche 911 GT3 RS</h1>
+                <div class="forza">
+                    <img src="static/pics/gt3.png">
+                </div>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text <br>ever since the 1500s,
+                     when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries,<br>  but also the
+                     leap into electronic typesetting, remaining essentially unchanged. It was popularised in the
+                     1960s with the release of Letraset<br>  sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
+                     including versions of Lorem Ipsum</p>
+                     <button class="heart-button" onclick="this.classList.toggle('clicked')">Like</button>
+                     <span class="comment-icon" onclick="toggleCommentSection('commentSection1')">&#128172;</span>
+                     <!-- Comment Section -->
+                     <div id="commentSection1" class="comment-section">
+                         <textarea id="commentInput1" placeholder="Leave a comment"></textarea>
+                         <button onclick="postComment('comments1')">Post Comment</button>
+                     </div>
+                     <!-- Display Comments -->
+                     <div id="comments1" class="comments">
+                     </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.like-button').click(function() {
+            var likesCount = $(this).siblings('.likes-count');
+            var currentLikes = parseInt(likesCount.text());
+            likesCount.text(currentLikes + 1);
+        });
+    });
+</script>
+</body>
+</html>
