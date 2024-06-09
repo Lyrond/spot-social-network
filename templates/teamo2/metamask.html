@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<link rel="icon" type="image/x-icon" href="static/pics/favicon.png">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MetaMask Authentication</title>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <script>
+        async function connectMetaMask() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const web3 = new Web3(window.ethereum);
+                    const accounts = await web3.eth.getAccounts();
+                    return accounts[0];
+                } catch (error) {
+                    console.error(error);
+                    alert('Error connecting to MetaMask');
+                }
+            } else {
+                alert('MetaMask is not installed!');
+            }
+            return null;
+        }
+
+        async function handleSignup() {
+            const username = document.getElementById('signup_username').value;
+            const walletAddress = await connectMetaMask();
+            if (walletAddress) {
+                document.getElementById('signup_wallet_address').value = walletAddress;
+                document.getElementById('signup_form').submit();
+            }
+        }
+
+        async function handleLogin() {
+            const walletAddress = await connectMetaMask();
+            if (walletAddress) {
+                document.getElementById('login_wallet_address').value = walletAddress;
+                document.getElementById('login_form').submit();
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>MetaMask Authentication</h1>
+
+    <h2>Signup</h2>
+    <form id="signup_form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="signup">
+        <label for="signup_username">Username:</label>
+        <input type="text" id="signup_username" name="username" required>
+        <input type="hidden" id="signup_wallet_address" name="wallet_address">
+        <br>
+        <button type="button" onclick="handleSignup()">Signup</button>
+    </form>
+
+    <h2>Login</h2>
+    <form id="login_form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="login">
+        <input type="hidden" id="login_wallet_address" name="wallet_address">
+        <br>
+        <button type="button" onclick="handleLogin()">Login</button>
+    </form>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</body>
+</html>

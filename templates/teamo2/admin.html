@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="static/admin.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Admin</title>
+</head>
+<body>
+<script>
+    $('.menu a[data-menu]').on('click', function() {
+  var menu = $(this).data('menu');
+  $('.menu a.active').removeClass('active');
+  $(this).addClass('active');
+  $('.active[data-page]').removeClass('active');
+  $('[data-page="' + menu  + '"]').addClass('active');
+});
+
+$('body').on('click', '[data-dialog]', function() {
+  var action = $(this).data('dialog');
+  switch (action) {
+    case 'logout':
+      $('.dialog').toggleClass('active');
+      break;
+    }
+});
+
+$('body').on('click', '[data-dialog-action]', function() {
+  var action = $(this).data('dialog-action');
+  switch (action) {
+    case 'cancel':
+      $(this).closest('.dialog.active').toggleClass('active');
+      break;
+    }
+});
+
+function updateGraph(data) {
+  $('.graph .bar[data-day]').each(function() {
+    var day = $(this).data('day');
+    var barH = $(this).height();
+    switch (day) {
+      case 'sunday':
+        $(this).find('.bar-content').css('height', (barH / 100) * data[day]  + 'px');
+        break;
+      case 'monday':
+        $(this).find('.bar-content').css('height', (barH / 100) * data[day]  + 'px');
+        break;
+      case 'tuesday':
+        $(this).find('.bar-content').css('height', (barH / 100) * data[day]  + 'px');
+        break;
+      case 'wednesday':
+        $(this).find('.bar-content').css('height', (barH / 100) * data[day]  + 'px');
+        break;
+      case 'thursday':
+        $(this).find('.bar-content').css('height', (barH / 100) * data[day]  + 'px');
+        break;
+      case 'friday':
+        $(this).find('.bar-content').css('height', (barH / 100) * data[day]  + 'px');
+        break;
+      case 'saturday':
+        $(this).find('.bar-content').css('height', (barH / 100) * data[day]  + 'px');
+        break;
+               }
+  });
+}
+
+function addUserToTable(data) {
+  var table = $('.users-table');
+  var ele = '<div class="users-item"><div class="table-item noflex">' + data['id'] + '</div><div class="table-item">' + data['email'] + '</div><div class="table-item">' + data['username'] + '</div><div class="table-item">' + data['nickname'] + '</div><div class="table-item">' + (data['premium'] ? "Active" : "Inactive") + '</div><div class="table-item">' + (data['premium'] ? "Premium" : "Not Premium") + '<div class="user-edit-controls"><a href="#" class="table-edit-button">Edit</a></div></div></div>';
+  table.append(ele);
+}
+
+var tempData = {
+  sunday: 40,
+  monday: 50,
+  tuesday: 30,
+  wednesday: 20,
+  thursday: 30,
+  friday: 60,
+  saturday: 90
+}
+
+var users = [
+  {
+    "id": 0,
+    "email": "suzannenixon@medicroix.com",
+    "username": "Rosemarie45",
+    "nickname": "Mildred11",
+    "active": true,
+    "premium": false
+  },
+  {
+    "id": 10,
+    "email": "mildrednixon@medicroix.com",
+    "username": "Lorrie24",
+    "nickname": "Warren15",
+    "active": false,
+    "premium": true
+  },
+  {
+    "id": 20,
+    "email": "warrennixon@medicroix.com",
+    "username": "Celina35",
+    "nickname": "Beck16",
+    "active": false,
+    "premium": false
+  },
+  {
+    "id": 30,
+    "email": "becknixon@medicroix.com",
+    "username": "Simone18",
+    "nickname": "Tonia12",
+    "active": false,
+    "premium": true
+  },
+  {
+    "id": 40,
+    "email": "tonianixon@medicroix.com",
+    "username": "Alejandra31",
+    "nickname": "Eileen42",
+    "active": true,
+    "premium": false
+  },
+  {
+    "id": 50,
+    "email": "eileennixon@medicroix.com",
+    "username": "Ofelia4",
+    "nickname": "Walsh36",
+    "active": true,
+    "premium": true
+  },
+  {
+    "id": 60,
+    "email": "walshnixon@medicroix.com",
+    "username": "Owen24",
+    "nickname": "Mayra0",
+    "active": false,
+    "premium": true
+  },
+  {
+    "id": 70,
+    "email": "mayranixon@medicroix.com",
+    "username": "Tamra8",
+    "nickname": "Graham9",
+    "active": false,
+    "premium": true
+  },
+  {
+    "id": 80,
+    "email": "grahamnixon@medicroix.com",
+    "username": "Dejesus44",
+    "nickname": "Russo5",
+    "active": false,
+    "premium": false
+  }
+];
+
+$.each(users, function(i, item) {
+  addUserToTable(users[i]);
+});
+
+updateGraph(tempData);
+
+$('body').on('click', '.users-item:not(.header)', function() {
+  console.log('click')
+  $(this).toggleClass('active')
+});
+
+$('body').on('click', '.users-item a.table-edit-button', function() {
+  $(this).closest('.grid').toggleClass('edit-users');
+  $(this).closest('.users-item').toggleClass('active');
+  e.preventDefault();
+});
+
+$('body').on('click', '.user-edit .header .close', function() {
+  $(this).closest('.grid').toggleClass('edit-users');
+  $(this).closest('.users-item').toggleClass('active');
+  e.preventDefault();
+});
+</script>
+    <div class="container">
+        <div class="content">
+          <div class="page active" data-page="dashboard">
+            <div class="header">
+              <div class="title">
+                <h2>Dashboard</h2>
+              </div>
+            </div>
+            <div class="grid">
+              <div class="card">
+                <div class="head">
+                  <span class="icon">
+                    <i class="icon ion-pound"></i>
+                  </span>
+                  <span class="stat">
+                    Hubs
+                  </span>
+                  <div class="status">
+                  </div>
+                </div>
+                <div class="body">
+                  <h2>Hub status</h2>
+                  <p>
+                    Active
+                  </p>
+                  <h2>Subscribed user amount</h2>
+                  <p>
+                    112
+                  </p>
+                </div>
+                <div class="footer">
+                  <div class="user">
+                    <div class="user-icon">
+                    </div>
+                    <span class="username">
+                      Administrator
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="head">
+                  <span class="icon">
+                    <i class="icon ion-code-working"></i>
+                  </span>
+                  <span class="stat">
+                    Last Posts
+                  </span>
+                  <div class="status">
+                  </div>
+                </div>
+                <div class="body">
+                    <a  href="cars.html">
+                  <h2>Link to post</h2>
+                  </a>
+                  <p>
+                    New BMW M4: legend?
+                  </p>
+                  <a  href="games.html">
+                    <h2>Link to post</h2>
+                    </a>
+                    <p>
+                        League of Legends or Dota 2?
+                    </p>
+                    <a  href="crypto.html">
+                        <h2>Link to post</h2>
+                        </a>
+                        <p>
+                            Bitcoin: how it goes?
+                        </p>
+                </div>
+                <div class="footer">
+                  <div class="user">
+                    <div class="user-icon">
+                    </div>
+                    <span class="username">
+                        Username: TheDarkFlashOj
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="head">
+                  <span class="icon">
+                    <i class="icon ion-code-working"></i>
+                  </span>
+                  <span class="stat">
+                    Last Posts
+                  </span>
+                  <div class="status">
+                  </div>
+                </div>
+                <div class="body">
+                    <a  href="main.html">
+                  <h2>Link to post</h2>
+                  </a>
+                  <p>
+                    Drift Series best set
+                  </p>
+                  <a  href="games.html">
+                    <h2>Link to post</h2>
+                    </a>
+                    <p>
+                        League of Legends or Dota 2?
+                    </p>
+                    <a  href="mental.html">
+                        <h2>Link to post</h2>
+                        </a>
+                        <p>
+                            Stop closing your emotions. How to be superhero
+                        </p>
+                </div>
+                <div class="footer">
+                  <div class="user">
+                    <div class="user-icon">
+                    </div>
+                    <span class="username">
+                        Username: Quiconak
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="head">
+                  <span class="icon">
+                    <i class="icon ion-code-working"></i>
+                  </span>
+                  <span class="stat">
+                    Last Posts
+                  </span>
+                  <div class="status">
+                  </div>
+                </div>
+                <div class="body">
+                    <a  href="cars.html">
+                  <h2>Link to post</h2>
+                  </a>
+                  <p>
+                    New BMW M4: legend?
+                  </p>
+                  <a  href="games.html">
+                    <h2>Link to post</h2>
+                    </a>
+                    <p>
+                        League of Legends or Dota 2?
+                    </p>
+                    <a  href="crypto.html">
+                        <h2>Link to post</h2>
+                        </a>
+                        <p>
+                            Bitcoin: how it goes?
+                        </p>
+                </div>
+                <div class="footer">
+                  <div class="user">
+                    <div class="user-icon">
+                    </div>
+                    <span class="username">
+                        Username: dswar2
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="card-verticle">
+                <div class="card-small">
+                  <span class="title">
+                    Active Users
+                  </span>
+                  <h2 class="text">12</h2>
+                  <div class="graph">
+                    <div class="bar" data-day="sunday">
+                      <div class="bar-content"></div>
+                    </div>
+                    <div class="bar" data-day="monday">
+                      <div class="bar-content"></div>
+                    </div>
+                    <div class="bar" data-day="tuesday">
+                      <div class="bar-content"></div>
+                    </div>
+                    <div class="bar" data-day="wednesday">
+                      <div class="bar-content"></div>
+                    </div>
+                    <div class="bar" data-day="thursday">
+                      <div class="bar-content"></div>
+                    </div>
+                    <div class="bar" data-day="friday">
+                      <div class="bar-content"></div>
+                    </div>
+                    <div class="bar" data-day="saturday">
+                      <div class="bar-content"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-small">
+                  <span class="title">
+                    Overview
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="stats">
+            </div>
+          </div>
+          <div class="page noflex" data-page="users">
+            <div class="header">
+              <div class="title">
+                <h2>Users</h2>
+              </div>
+            </div>
+            <div class="grid">
+              <div class="user-edit">
+                <div class="header">
+                  <span class="icon">
+                    <i class="icon ion-person"></i>
+                  </span>
+                  <span class="user-edit-name">$_USERNAME</span>
+                  <a href="#" class="close"><i class="icon ion-close-round"></i></a>
+                </div>
+              </div>
+              <div class="users-table">
+                <div class="users-item header">
+                  <div class="table-item noflex">
+                    ID
+                  </div>
+                  <div class="table-item">
+                    Email Address
+                  </div>
+                  <div class="table-item">
+                    Username
+                  </div>
+                  <div class="table-item">
+                    Nickname
+                  </div>
+                  <div class="table-item">
+                    Active
+                  </div>
+                  <div class="table-item">
+                    Premium
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="page noflex" data-page="download">
+            <div class="header">
+              <div class="title">
+                <h2>Download</h2>
+              </div>
+            </div>
+            <div class="grid">
+              <div class="card wide">
+                <div class="head">
+                  <span class="icon">
+                    <i class="icon ion-code-working"></i>
+                  </span>
+                  <span class="stat">
+                    Cheat Client
+                  </span>
+                  <div class="status">
+                  </div>
+                </div>
+                <div class="body">
+                  <h2>Latest Version: v$_VERSION</h2>
+                  <p>
+                    changelog here
+                  </p>
+                </div>
+                <div class="footer">
+                  <div class="user">
+                    <div class="user-icon">
+                    </div>
+                    <span class="username">
+                      Administrator 
+                    </span>
+                  </div>
+                  <a class="download" href="#">Download <i class="icon ion-archive"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="page noflex" data-page="about">
+            <div class="header">
+              <div class="title">
+                <h2>About</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar">
+      
+        </div>
+        <div class="dialog">
+          <div class="dialog-block">
+            <h2>Are you sure you want to logout?</h2>
+            <div class="controls">
+              <a href="#" class="button">Logout</a>
+              <a data-dialog-action="cancel" href="#" class="button">Cancel</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+</body>
+</html>

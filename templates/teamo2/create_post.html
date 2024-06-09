@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="static/post.css">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="static/pics/favicon.png">
+<title>Create new post!</title>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <img src="static/pics/logo.png" alt="Spot Logo" class="logo">
+            <input type="search" placeholder="Search hubs" class="search-bar">
+            <a href="index.html" class="log">Login</a>
+            <a href="index.html" class="log">Sign Up</a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-links">
+                <li><a href="create_post.html" style="font-weight: bold; font-size:larger;">Create post</a></li>
+                <br>
+                <li><img src="static/pics/423483-200.png"><a href="main.html">Home</a></li>
+                <li><img src="static/pics/fire-2.png"><a href="hub2.html">Lit</a></li>
+                <br>
+                <p1>HUBS</p1>
+                <br>
+                <br>
+                <li><img src="static/pics/game.png"><a href="games.html">Games</a></li>
+                <li><img src="static/pics/ball.png"><a href="sports.html">Sports</a></li>
+                <li><img src="static/pics/bit.png"><a href="crypto.html">Crypto</a></li>
+                <li><img src="static/pics/car.png"><a href="cars.html">Cars</a></li>
+                <li><img src="static/pics/health.png"><a href="health.html">Health</a></li>
+                <li><img src="static/pics/meental.png"><a href="mental.html">Mental</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="input">
+        <form method="post" action="{% url 'create_new_post' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                <label for="hub">Select Hub:</label>
+                <select name="hub" id="hub" onchange="toggleOtherHubInput()">
+                    <option value="games">Games</option>
+                    <option value="sports">Sports</option>
+                    <option value="crypto">Crypto</option>
+                    <option value="cars">Cars</option>
+                    <option value="health">Health</option>
+                    <option value="mental">Mental</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div id="newHubInput" style="display:none;">
+                <label for="new_hub">Enter Hub Theme:</label>
+                <input type="text" name="new_hub" id="new_hub" placeholder="Enter hub theme...">
+            </div>
+
+            <div>
+                <label for="paragraphName">Paragraph Name:</label>
+                <input type="text" name="paragraph_name" id="paragraphName" placeholder="Enter paragraph name..." required>
+            </div>
+
+            <div>
+                <label for="image">Upload Image:</label>
+                <input type="file" name="image" id="image" accept="image/*">
+            </div>
+
+            <div>
+                <label for="textContent">Text Content:</label>
+                <textarea name="text_content" id="textContent" placeholder="Your post goes here...." required></textarea>
+            </div>
+            <button type="submit">Submit Post</button>
+        </form>
+    </div>
+    <script>
+        function toggleOtherHubInput() {
+            var hubSelect = document.getElementById('hub');
+            var newHubInput = document.getElementById('newHubInput');
+            if (hubSelect.value === 'other') {
+                newHubInput.style.display = 'block';
+            } else {
+                newHubInput.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
