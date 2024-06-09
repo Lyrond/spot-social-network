@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="static/style2.css">
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="static/pics/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .image-container {
+    position: relative;
+    width: 1000px; 
+    height: 200px;
+    border: 2px solid #c1c1c1;
+    border-radius: 25px;
+    margin-left: 250px;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    
+}
+
+.image-container input[type="file"] {
+    cursor: pointer; 
+    width: 100px;
+    height: 150px;
+}
+
+.image-container label {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profilepic{
+    position: relative;
+    width: 11rem; 
+    height: 5rem;
+    border: 2px solid #c1c1c1;
+    background-color: #dedede;
+    border-radius: 50%;
+    margin-top: -80px;
+    padding-top: 100px;
+    margin-left: 300px;
+}
+
+.profilepic input[type="file"] {
+    width: 100px;
+    height: 10px;
+}
+
+.profilepic label {
+    display: inline-block;
+    padding: 5px 8px;
+    margin-left: 28px;
+    border: 1px solid #090707;
+    border-radius: 5px;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.profilepic:hover label {
+    opacity: 1; 
+  }
+
+.username p1 {
+    color: #000000;
+    padding: 1000 200;
+    font-weight: bold;
+    font-size: larger;
+    margin-left: 500px;
+    position: relative;
+    top: -95px;
+    font-size: 30px;
+}
+
+.Status p2 {
+    font-size: large;
+    margin-left: 500px;
+    position: relative;
+        top: -95px;
+}
+.qq{
+    padding-top: 80px;
+}
+    </style>
+    <title>Spot</title>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <img src="static/pics/logo.png" alt="Spot Logo" class="logo">
+            <input type="search" placeholder="Search hubs" class="search-bar">
+            <a href="index.html" class="log">Login</a>
+            <a href="index.html" class="log">Sign Up</a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-links">
+                <li><a href="post.html" style="font-weight: bold; font-size:larger;">Create post</a></li>
+                <br>
+                <li><img src="static/pics/423483-200.png"><a href="main.html">Home</a></li>
+                <li><img src="static/pics/fire-2.png"><a href="hub2.html">Lit</a></li>
+                <br>
+                <p1>HUBS</p1>
+                <br>
+                <br>
+                <li><img src="static/pics/game.png"><a href="games.html">Games</a></li>
+                <li><img src="static/pics/ball.png"><a href="sports.html">Sports</a></li>
+                <li><img src="static/pics/bit.png"><a href="crypto.html">Crypto</a></li>
+                <li><img src="static/pics/car.png"><a href="cars.html">Cars</a></li>
+                <li><img src="static/pics/health.png"><a href="health.html">Health</a></li>
+                <li><img src="static/pics/meental.png"><a href="mental.html">Mental</a></li>
+            </ul>
+        </nav>
+    </header>
+<div class="qq">
+    <div class="image-container">
+        <img id="preview" src="" alt="Uploaded Image">
+        <input type="file" id="image-upload" accept="image/*" hidden>
+        <label for="image-upload">Choose Image</label>
+    </div>
+
+    <div class="profilepic">
+        <img id="preview" src="" alt="">
+        <input type="file" id="image-upload" accept="image/*" hidden>
+        <label for="image-upload">Choose Image</label>
+    </div>
+    <div class="username">
+        <p1>John Doe</p1>
+    </div>
+    <div class="Status">
+        <p2>Status: pajaasos</p2>
+    </div>
+</div>
+    <script>
+        const imageUpload = document.getElementById('image-upload');
+const previewImage = document.getElementById('preview');
+
+imageUpload.addEventListener('change', function() {
+  const file = this.files[0];
+
+  if (file && file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      previewImage.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    alert("Please select an image file.");
+  }
+});
+
+    </script>
+   </body>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event.event_name }}</title>
+    <link rel="stylesheet" type="text/css" href="'static/style2.css">
+    <script>
+        function updateTimer() {
+            const eventDate = new Date("{{ event.event_date|date}}").getTime();
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("timer").innerHTML = days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ";
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("timer").innerHTML = "EVENT ENDED";
+            }
+        }
+
+        setInterval(updateTimer, 1000);
+    </script>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <img src="pics/logo.png" alt="Spot Logo" class="logo">
+            <input type="search" placeholder="Search hubs" class="search-bar">
+            {% if user.is_authenticated %}
+                <div class="profile">
+                    <a href="{% url 'profile' %}" class="profile">
+                        <img src="pics/profile-icon.png" alt="Profile Icon" class="profile-icon">
+                        <span>{{ user.username }}</span>
+                    </a>
+                    <a href="{% url 'logout' %}" class="log">Logout</a>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="log">Login</a>
+                <a href="{% url 'signup' %}" class="log">Sign Up</a>
+            {% endif %}
+        </div>
+        <nav class="nav">
+            <ul class="nav-links">
+                <li><a href="{% url 'create_new_post' %}" style="font-weight: bold; font-size:larger;">Create Post</a></li>
+                <li><a href="{% url 'create_event' %}" style="font-weight: bold; font-size:larger;">Create Event</a></li>
+                <br>
+                <li><img src="static/pics/423483-200.png"><a href="main.html">Home</a></li>
+                <li><img src="static/pics/fire-2.png"><a href="lit.html">Lit</a></li>
+                <br>
+                <p1>HUBS</p1>
+                <br>
+                <br>
+                <li><img src="static/pics/game.png"><a href="games.html">Games</a></li>
+                <li><img src="static/pics/ball.png"><a href="sports.html">Sports</a></li>
+                <li><img src="static/pics/bit.png"><a href="crypto.html">Crypto</a></li>
+                <li><img src="static/pics/car.png"><a href="cars.html">Cars</a></li>
+                <li><img src="static/pics/health.png"><a href="health.html">Health</a></li>
+                <li><img src="static/pics/meental.png"><a href="mental.html">Mental</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>{{ event.event_name }}</h1>
+        <img src="{{ event.image.url }}" alt="{{ event.event_name }}">
+        <p>{{ event.description }}</p>
+        <p><strong>Event Date:</strong> {{ event.event_date }}</p>
+        <p><strong>Time Remaining:</strong> <span id="timer"></span></p>
+        <h2>Participants</h2>
+        <ul id="participants-list">
+            {% for participant in participants %}
+                <li>{{ participant.username }}</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Participants Count:</strong> <span id="participants-count">{{ participants|length }}</span></p>
+        <button onclick="joinEvent({{ event.id }})">Join Event</button>
+    </main>
+</body>
+</html>

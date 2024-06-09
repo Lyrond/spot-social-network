@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="static/style2.css">
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .image{
+            height: 20%;
+            width: auto;
+        }
+    </style>
+    <title>Lit Hub</title>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <img src="static/pics/logo.png" alt="Spot Logo" class="logo">
+            <input type="search" placeholder="Search hubs" class="search-bar">
+            {% if user.is_authenticated %}
+                <div class="profile">
+                    <a href="{% url 'profile' %}" class="profile">
+                        <img src="static/pics/profile-icon.png" alt="Profile Icon" class="profile-icon">
+                        <span>{{ user.username }}</span>
+                    </a>
+                    <a href="{% url 'logout' %}" class="log">Logout</a>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="log">Login</a>
+                <a href="{% url 'signup' %}" class="log">Sign Up</a>
+            {% endif %}
+        </div>
+        <nav class="nav">
+            <ul class="nav-links">
+                <li><a href="create_post.html" style="font-weight: bold; font-size:larger;">Create post</a></li>
+                <br>
+                <li><img src="static/pics/423483-200.png"><a href="main.html">Home</a></li>
+                <li><img src="static/pics/fire-2.png"><a href="lit.html">Lit</a></li>
+                <br>
+                <p1>HUBS</p1>
+                <br>
+                <br>
+                <li><img src="static/pics/game.png"><a href="games.html">Games</a></li>
+                <li><img src="static/pics/ball.png"><a href="sports.html">Sports</a></li>
+                <li><img src="static/pics/bit.png"><a href="crypto.html">Crypto</a></li>
+                <li><img src="static/pics/car.png"><a href="cars.html">Cars</a></li>
+                <li><img src="static/pics/health.png"><a href="health.html">Health</a></li>
+                <li><img src="static/pics/meental.png"><a href="mental.html">Mental</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="posts">
+            {% for post in posts %}
+                <div class="post">
+                    <h2>{{ post.paragraph_name }}</h2>
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.paragraph_name }}" class="image">
+                    {% endif %}
+                    <p>{{ post.text_content }}</p>
+                    <span>Posted by {{ post.user.username }} on {{ post.created_at }}</span>
+                    <div class="post-interactions">
+                        <button class="like-button" onclick="likePost({{ post.id }})">
+                            Like (<span id="likes-count-{{ post.id }}">{{ post.liked_by.count }}</span>)
+                        </button>
+                        <span class="comment-icon" onclick="toggleCommentSection('commentSection{{ post.id }}')">&#128172;</span>
+                    </div>
+                    <div id="commentSection{{ post.id }}" class="comment-section" style="display:none;">
+                        <form method="post" action="{% url 'comment_post' post.id %}">
+                            {% csrf_token %}
+                            <textarea name="text" placeholder="Leave a comment"></textarea>
+                            <button type="submit">Post Comment</button>
+                        </form>
+                        <div class="comments">
+                            {% for comment in post.comment_set.all %}
+                                <div class="comment">
+                                    <span>{{ comment.user.username }}:</span> {{ comment.text }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+    <script>
+        function toggleCommentSection(commentSectionId) {
+            var commentSection = document.getElementById(commentSectionId);
+            commentSection.style.display = (commentSection.style.display === 'none') ? 'block' : 'none';
+        }
+
+        function likePost(postId) {
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch(`/like_post/${postId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`likes-count-${postId}`).innerText = data.likes_count;
+                } else {
+                    alert('An error occurred.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred.');
+            });
+        }
+    </script>
+</body>
+</html>
