@@ -208,22 +208,43 @@ def comment_post(request, post_id):
 @login_required
 def join_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
-    if request.user in event.participants.all():
-        event.participants.remove(request.user)
+    user = request.user
+
+    if user in event.participants.all():
+        event.participants.remove(user)
         joined = False
     else:
-        event.participants.add(request.user)
+        event.participants.add(user)
         joined = True
-    return JsonResponse({'success': True, 'joined': joined, 'participants_count': event.participants.count()})
+
+    participants_count = event.participants.count()
+    return JsonResponse({'success': True, 'joined': joined, 'participants_count': participants_count})
+
+@login_required
+def join_event_detail(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    user = request.user
+
+    if user in event.participants.all():
+        event.participants.remove(user)
+        joined = False
+    else:
+        event.participants.add(user)
+        joined = True
+
+    participants = [{'username': participant.username} for participant in event.participants.all()]
+
+    return JsonResponse({
+        'success': True,
+        'joined': joined,
+        'participants_count': event.participants.count(),
+        'participants': participants
+    })
 
 @login_required
 def event_detail(request, event_id):
     event = get_object_or_404(Event, id=event_id)
-    participants = event.participants.all()
-    return render(request, 'teamo2/event.html', {
-        'event': event,
-        'participants': participants
-    })
+    return render(request, 'teamo2/event.html', {'event': event})
 
 def lit_hub(request):
     posts = Post.objects.all()

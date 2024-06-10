@@ -149,7 +149,7 @@ header {
     background-color: #f0f0f0;
     padding: 10px;
     margin-bottom: 20px;
-    border-radius: 5px;
+    border-radius: 30px;
 }
 
 .post h3 {
@@ -190,6 +190,7 @@ header {
     font-size: 24px;
     outline: none;
     transition: color 0.3s ease;
+    margin-bottom: 10px;
 }
 
 .heart-button::before {
@@ -211,7 +212,8 @@ header {
 }
 
 .container3{
-    margin-top: -1100px;
+    margin-top: -1300px;
+    padding-top: 300px;
 }
 
 .comment-section {

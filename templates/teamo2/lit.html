@@ -10,22 +10,56 @@
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <title>Lit Hub</title>
     <style>
+        .post-interactions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding-left: 15px;
+        }
+        
         .like-button{
-        padding-top: 8px;
-        background-color: #fff;
-        border-radius: 50%;
-        justify-content: center;
-        align-items: center;
-        width: 20px;
-        height: 20px;
-        border: none;
-        cursor: pointer;
-}
-
-.like-button img{
-    width: 20px;
-    height: 20px;
-}
+            display: flex;
+            padding: 0;
+            background: none;
+            border-radius: 50%;
+            justify-content: center;
+            align-items: center;
+            width: 20px;
+            height: 20px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .like-button img.zbs {
+            margin-right: 5px; 
+        }
+        
+        
+        .posty{
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 30px;
+            width: 1500px;
+            height: auto;
+        }
+        
+        .posty .image{
+            width: 1000px;
+            height: 150px;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            border-radius: 30px;
+        }
+        .posty .zbs{
+            width: 20px;
+            height: 20px;
+        }
+        
+        .posts{
+        margin-bottom: 100px;
+        }
     </style>
 </head>
 <body>
@@ -69,24 +103,28 @@
         <main>
         <div class="posts">
             {% for post in posts %}
-                <div class="post">
+                <div class="posty">
                     <h2>{{ post.paragraph_name }}</h2>
                     {% if post.image %}
-                        <img src="{{ post.image.url }}" alt="{{ post.paragraph_name }}">
+                        <img src="{{ post.image.url }}" alt="{{ post.paragraph_name }}" class="image">
                     {% endif %}
                     <p>{{ post.text_content }}</p>
                     <span>Posted by {{ post.user.username }} on {{ post.created_at }}</span>
                     <div class="post-interactions">
                         <button class="like-button" onclick="likePost({{ post.id }})">
-                            Like (<span id="likes-count-{{ post.id }}">{{ post.liked_by.count }}</span>)
+                            <img src="static/pics/heart.png" class="zbs">(<span id="likes-count-{{ post.id }}">{{ post.liked_by.count }}</span>)
                         </button>
                         <span class="comment-icon" onclick="toggleCommentSection('commentSection{{ post.id }}')">&#128172;</span>
                     </div>
                     <div id="commentSection{{ post.id }}" class="comment-section" style="display:none;">
                         <form method="post" action="{% url 'comment_post' post.id %}">
                             {% csrf_token %}
-                            <textarea name="text" placeholder="Leave a comment"></textarea>
-                            <button type="submit">Post Comment</button>
+                            <textarea name="text" placeholder="Leave a comment" style="height: 44px; width: 461px;"></textarea>
+                            <button type="submit" style="background-color: #9ac51f;    text-decoration: none;
+                            color: white;
+                            text-transform: uppercase;
+                            font-weight: bold;     padding: 8px 20px; 
+                            border-radius: 25px;     border-color: #f0f0f0; padding-top: -10px; cursor: pointer;">Post Comment</button>
                         </form>
                         <div class="comments">
                             {% for comment in post.comment_set.all %}
@@ -100,18 +138,21 @@
             {% endfor %}
         </div>
         <h1>Events</h1>
-        <div class="events">
+        <div class="posty">
             {% for event in events %}
                 <div class="event">
-                    <h2>{{ event.event_name }}</h2>
-                    {% if event.image %}
-                        <img src="{{ event.image.url }}" alt="{{ event.event_name }}">
-                    {% endif %}
+                    <a href="{% url 'event_detail' event.id %}">{{ event.event_name }}</a>
+                    <img src="{{ event.image.url }}" alt="{{ event.event_name }}" class="image">
                     <p>{{ event.description }}</p>
-                    <span>Event Date: {{ event.event_date }}</span>
-                    <span>Created by {{ event.user.username }} on {{ event.created_at }}</span>
-                    <button class="join-button" onclick="joinEvent({{ event.id }})">
-                        Join Event (<span id="participants-count-{{ event.id }}">{{ event.participants.count }}</span>)
+                    <p>Event Date: {{ event.event_date }}</p>
+                    <p>Remaining Time: <span id="timer-{{ event.id }}"></span></p>
+                    <p>Participants: <span id="participants-count-{{ event.id }}">{{ event.participants.count }}</span></p>
+                    <button id="join-button-{{ event.id }}" onclick="toggleEventParticipation({{ event.id }})">
+                        {% if user in event.participants.all %}
+                            Leave Event
+                        {% else %}
+                            Join Event
+                        {% endif %}
                     </button>
                 </div>
             {% endfor %}
@@ -169,6 +210,57 @@
             })
 
         }
+
+            function toggleEventParticipation(eventId) {
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            fetch(`/event/${eventId}/join/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`participants-count-${eventId}`).innerText = data.participants_count;
+                    const joinButton = document.getElementById(`join-button-${eventId}`);
+                    joinButton.innerText = data.joined ? "Leave Event" : "Join Event";
+                } else {
+                    alert("An error occurred while trying to join/leave the event.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while trying to join/leave the event.');
+            });
+        }
+
+        function startTimers(events) {
+            events.forEach(event => {
+                const eventDate = new Date(event.event_date).getTime();
+                setInterval(() => {
+                    const now = new Date().getTime();
+                    const distance = eventDate - now;
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    document.getElementById(`timer-${event.id}`).innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+                    if (distance < 0) {
+                        document.getElementById(`timer-${event.id}`).innerHTML = "Event has started";
+                    }
+                }, 1000);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const eventsData = JSON.parse(document.getElementById('events-data').textContent);
+            startTimers(eventsData);
+        });
     </script>
 </body>
 </html>

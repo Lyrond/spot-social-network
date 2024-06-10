@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ event.event_name }}</title>
-    <link rel="stylesheet" type="text/css" href="'static/style2.css">
+    <link rel="stylesheet" type="text/css" href="static/style2.css">
     <script>
         function updateTimer() {
             const eventDate = new Date("{{ event.event_date|date}}").getTime();
@@ -16,27 +16,73 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById("timer").innerHTML = days + "d " + hours + "h "
-            + minutes + "m " + seconds + "s ";
+            document.getElementById("timer").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
 
             if (distance < 0) {
-                clearInterval(x);
                 document.getElementById("timer").innerHTML = "EVENT ENDED";
             }
         }
 
         setInterval(updateTimer, 1000);
+
+         function joinEvent(eventId) {
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch(`/join_event/${eventId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const button = document.querySelector(`.join-button[onclick="joinEvent(${eventId})"]`);
+                    button.innerText = data.joined ? 'Leave Event' : 'Join Event';
+                    document.getElementById(`participants-count-${eventId}`).innerText = data.participants_count;
+                } else {
+                    alert('An error occurred.');
+                }
+            })
+
+        }
+
+            function toggleEventParticipation(eventId) {
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            fetch(`/event/${eventId}/join/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`participants-count-${eventId}`).innerText = data.participants_count;
+                    const joinButton = document.getElementById(`join-button-${eventId}`);
+                    joinButton.innerText = data.joined ? "Leave Event" : "Join Event";
+                } else {
+                    alert("An error occurred while trying to join/leave the event.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while trying to join/leave the event.');
+            });
+        }
     </script>
 </head>
 <body>
     <header>
         <div class="top-bar">
-            <img src="pics/logo.png" alt="Spot Logo" class="logo">
+            <img src="static/pics/logo.png" alt="Spot Logo" class="logo">
             <input type="search" placeholder="Search hubs" class="search-bar">
             {% if user.is_authenticated %}
                 <div class="profile">
                     <a href="{% url 'profile' %}" class="profile">
-                        <img src="pics/profile-icon.png" alt="Profile Icon" class="profile-icon">
+                        <img src="static/pics/profile-icon.png" alt="Profile Icon" class="profile-icon">
                         <span>{{ user.username }}</span>
                     </a>
                     <a href="{% url 'logout' %}" class="log">Logout</a>
@@ -72,14 +118,15 @@
         <p>{{ event.description }}</p>
         <p><strong>Event Date:</strong> {{ event.event_date }}</p>
         <p><strong>Time Remaining:</strong> <span id="timer"></span></p>
-        <h2>Participants</h2>
-        <ul id="participants-list">
-            {% for participant in participants %}
-                <li>{{ participant.username }}</li>
-            {% endfor %}
-        </ul>
-        <p><strong>Participants Count:</strong> <span id="participants-count">{{ participants|length }}</span></p>
-        <button onclick="joinEvent({{ event.id }})">Join Event</button>
+        <p><strong>Participants Count:</strong> <span id="participants-count">{{ event.participants.count }}</span></p>
+        <button id="join-button-{{ event.id }}" onclick="toggleEventParticipation({{ event.id }})">
+            {% if user in event.participants.all %}
+                Leave Event
+            {% else %}
+                Join Event
+            {% endif %}
+        </button>
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
     </main>
 </body>
 </html>
