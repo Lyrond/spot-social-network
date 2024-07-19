@@ -1,4 +1,5 @@
 SPOT
+
 Welcome to SPOT, a social network designed to connect people through shared interests. Discover and join hubs, participate in events, and explore our unique blockchain integration.
 
 Features
